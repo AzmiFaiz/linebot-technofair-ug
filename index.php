@@ -34,9 +34,9 @@ $app->get('/', function($req, $res)
   echo "Welcome at Slim Framework";
 });
 
+
 // buat route untuk webhook
-$app->post('/webhook', function ($request, $response) use ($bot, $pass_signature)
-{
+$app->post('/webhook', function ($request, $response) use ($bot, $pass_signature){
     // get request body and line signature header
     $body        = file_get_contents('php://input');
     $signature = isset($_SERVER['HTTP_X_LINE_SIGNATURE']) ? $_SERVER['HTTP_X_LINE_SIGNATURE'] : '';
@@ -112,5 +112,19 @@ if(is_array($data['events'])){
     }
 }   
 });
+
+$app->get('/content/{messageId}', function($req, $res) use ($bot)
+{
+    // get message content
+    $route      = $req->getAttribute('route');
+    $messageId = $route->getArgument('messageId');
+    $result = $bot->getMessageContent($messageId);
+
+    // set response
+    $res->write($result->getRawBody());
+
+    return $res->withHeader('Content-Type', $result->getHeader('Content-Type'));
+});
+
 
 $app->run();
