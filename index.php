@@ -59,7 +59,7 @@ $app->post('/webhook', function ($request, $response) use ($bot, $pass_signature
 
     // kode aplikasi nanti disini
 
-    $data = json_decode($body, true);
+$data = json_decode($body, true);
 if(is_array($data['events'])){
     foreach ($data['events'] as $event)
     {
@@ -67,12 +67,10 @@ if(is_array($data['events'])){
         {
             if($event['message']['type'] == 'text')
             {
-                if($event['message']['type'] == 'Hai'){
-                    $result = $bot->replyText($event['replyToken'], "Hai bro");
+                if($event['message']['text'] == 'Hai') {
+                    $result = $bot->replyText($event['replyToken'], "Halo Gan ;)");
                 }
-                // send same message as reply to user
-                // $result = $bot->replyText($event['replyToken'], $event['message']['text']);
-                // $result = $bot->replyText($event['replyToken'], "Hai bro");
+ 
                 // or we can use replyMessage() instead to send reply message
                 // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
                 // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
