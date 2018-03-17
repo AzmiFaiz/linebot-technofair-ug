@@ -67,7 +67,7 @@ if(is_array($data['events'])){
         {
             if($event['message']['type'] == 'text')
             {
-                if($event['message']['type'] == 'hai'){
+                if($event['message']['type'] == 'Hai'){
                     $result = $bot->replyText($event['replyToken'], "Hai bro");
                 }
                 // send same message as reply to user
