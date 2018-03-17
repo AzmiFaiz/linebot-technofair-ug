@@ -69,8 +69,17 @@ if(is_array($data['events'])){
             {
                 if($event['message']['text'] == 'Hai') {
                     $result = $bot->replyText($event['replyToken'], "Halo Gan ;)");
-                }
- 
+                }elseif (strtolower(trim($event['message']['text'])) == 'sayang mau curhat'){
+                            $packageId = 1;
+                            $stickerId = 13;
+                            $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
+                            $result = $bot->replyMessage($replyToken, $stickerMessageBuilder);
+                        }elseif(strtolower(trim($event['message']['text'])) == 'sedih deh hari ini'){
+                            $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
+                        }else{
+                            $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
+                        }
+                
                 // or we can use replyMessage() instead to send reply message
                 // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
                 // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
