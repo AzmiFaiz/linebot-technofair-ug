@@ -77,7 +77,7 @@ if(is_array($data['events'])){
                         }elseif(strtolower(trim($event['message']['text'])) == 'sedih deh hari ini'){
                             $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
                         }else{
-                            $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
+                            $result = $bot->replyText($event['replyToken'], 'Maaf, keyword yang anda masukkan tidak dikenali');
                         }
                 
                 // or we can use replyMessage() instead to send reply message
