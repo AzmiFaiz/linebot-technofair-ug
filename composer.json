@@ -1,0 +1,16 @@
+{
+    "name": "faiz/robott-film",
+    "description": "ini line bot tentang film",
+    "type": "project",
+    "require": {
+        "php": "^7.1",
+        "slim/slim": "^3.9",
+        "linecorp/line-bot-sdk": "^2.3"
+    },
+    "authors": [
+        {
+            "name": "AzmiFaiz",
+            "email": "amfibifaiz@gmail.com"
+        }
+    ]
+}
