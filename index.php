@@ -70,14 +70,27 @@ if(is_array($data['events'])){
                 if($event['message']['text'] == 'Hai') {
                     $result = $bot->replyText($event['replyToken'], "Halo Gan ;)");
                 }elseif (strtolower(trim($event['message']['text'])) == 'sayang mau curhat'){
-                            $packageId = 1;
-                            $stickerId = 13;
-                            $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
-                            $result = $bot->replyMessage($event['replyToken'], $stickerMessageBuilder);
-                        }elseif(strtolower(trim($event['message']['text'])) == 'sedih deh hari ini'){
+                    $packageId = 1;
+                    $stickerId = 13;
+                    $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
+                    $result = $bot->replyMessage($event['replyToken'], $stickerMessageBuilder);
+                }elseif(strtolower(trim($event['message']['text'])) == 'sedih deh hari ini'){
                             $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
-                        }else{
-                            $result = $bot->replyText($event['replyToken'], 'Maaf, keyword yang anda masukkan tidak dikenali');
+                }elseif(
+                        $event['message']['type'] == 'image' or
+                        $event['message']['type'] == 'video' or
+                        $event['message']['type'] == 'audio' or
+                        $event['message']['type'] == 'file'
+                      ){
+                        $basePath  = $request->getUri()->getBaseUrl();
+                        $contentURL  = $basePath."/content/".$event['message']['id'];
+                        $contentType = ucfirst($event['message']['type']);
+                        $result = $bot->replyText($event['replyToken'],
+                        $contentType. " yang kamu kirim bisa diakses dari link:\n " . $contentURL);
+
+                        return $res->withJson($result->getJSONDecodedBody(), $result->getHTTPStatus());
+                }else{
+                        $result = $bot->replyText($event['replyToken'], 'Maaf, keyword yang anda masukkan tidak dikenali');
                         }
                 
                 // or we can use replyMessage() instead to send reply message
