@@ -16,8 +16,8 @@ use \LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 $pass_signature = true;
 
 // set LINE channel_access_token and channel_secret
-$channel_access_token = "iG0SFFNOpjupl5dY0mRbyfoilKjorGHO9cb1yNbkqu4EoBem916kAL4g5brIirWDboQtmFU1weaD/OyIOZHD0cjrQYK2bNjgme1X5eZquVFknUP+E8nWmQLsW92Dkz64vc/+XloBJUoOCRtCZP1F3AdB04t89/1O/w1cDnyilFU=";
-$channel_secret = "3288dd5b5fe4f7000cbc0bf8bc95e22c";
+$channel_access_token = "fzRrLdC64VogCXR5Jo6DRxkOcuq6hocG5ZB+YvNejNk4Xj0kTcwOxQkZ/Y6LWLjQfB6PE196LPV08V6j3i92CxKa6+Amu0/Jx6m3uLFgg2vJYXkc9feDbvmq/Ok9iFr5ADhPiE6El5EuQXuXFHLWPQdB04t89/1O/w1cDnyilFU=";
+$channel_secret = "4bbd887550a7cde38a4c60978eafadf1";
 
 // inisiasi objek bot
 $httpClient = new CurlHTTPClient($channel_access_token);
@@ -30,7 +30,7 @@ $app = new Slim\App($configs);
 
 // buat route untuk url homepage
 $app->get('/', function($req, $res)
-{
+{   
   echo "Welcome at Slim Framework";
 });
 
@@ -58,51 +58,59 @@ $app->post('/webhook', function ($request, $response) use ($bot, $pass_signature
     }
 
     // kode aplikasi nanti disini
-
-$data = json_decode($body, true);
+    $data = json_decode($body, true);
 if(is_array($data['events'])){
     foreach ($data['events'] as $event)
     {
         if ($event['type'] == 'message')
         {
             if($event['message']['type'] == 'text')
-            {
-                if($event['message']['text'] == 'Hai') {
-                    $result = $bot->replyText($event['replyToken'], "Halo Gan ;)");
-                }elseif (strtolower(trim($event['message']['text'])) == 'sayang mau curhat'){
+            {   
+                if(strtolower(trim($event['message']['text'])) == 'sayang mau curhat'){
                     $packageId = 1;
-                    $stickerId = 13;
+                    $stickerId = 104;
                     $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                     $result = $bot->replyMessage($event['replyToken'], $stickerMessageBuilder);
                 }elseif(strtolower(trim($event['message']['text'])) == 'sedih deh hari ini'){
-                            $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
-                }elseif(
-                        $event['message']['type'] == 'image' or
-                        $event['message']['type'] == 'video' or
-                        $event['message']['type'] == 'audio' or
-                        $event['message']['type'] == 'file'
-                      ){
-                        $basePath  = $request->getUri()->getBaseUrl();
-                        $contentURL  = $basePath."/content/".$event['message']['id'];
-                        $contentType = ucfirst($event['message']['type']);
-                        $result = $bot->replyText($event['replyToken'],
-                        $contentType. " yang kamu kirim bisa diakses dari link:\n " . $contentURL);
-
-                        return $res->withJson($result->getJSONDecodedBody(), $result->getHTTPStatus());
+                    $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
                 }else{
-                        $result = $bot->replyText($event['replyToken'], 'Maaf, keyword yang anda masukkan tidak dikenali');
-                        }
+                    $result = $bot->replyText($event['replyToken'], 'Sedih kenapa sayang?');
+                }
+                // if($event['message']['text'] == 'hei'){
+                //     $result = $bot->replyText($event['replyToken'], "Hai bro");
+                // }
+                // send same message as reply to user
+                //  $result = $bot->replyText($event['replyToken'], $event['message']['text']);
+                // $result = $bot->replyText($event['replyToken'], "Hai bro".$event);
                 
+ //bit.ly/stickerlistccc
                 // or we can use replyMessage() instead to send reply message
                 // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
                 // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
  
                 return $response->withJson($result->getJSONDecodedBody(), $result->getHTTPStatus());
-            }
+            }elseif(
+                    $event['message']['type'] == 'image' or
+                    $event['message']['type'] == 'video' or
+                    $event['message']['type'] == 'audio' or
+                    $event['message']['type'] == 'file'
+                ){
+                    $basePath  = $request->getUri()->getBaseUrl();
+                    $contentURL  = $basePath."/content/".$event['message']['id'];
+                    $contentType = ucfirst($event['message']['type']);
+                    $result = $bot->replyText($event['replyToken'],
+                        $contentType. " yang kamu kirim bisa diakses dari link:\n " . $contentURL);
+
+                    return $res->withJson($result->getJSONDecodedBody(), $result->getHTTPStatus());
+                }else{
+                            //kalau chatnya selain image video audio file text
+                            
+
+                }
+            
         }
     }
-}
-
+}   
 });
 
 $app->run();
